@@ -7,15 +7,25 @@ HOSTS:
     hypervisor: vagrant
     box: centos/7
     mock_chroot: epel-7-x86_64
+    yum_repos:
+      grafana:
+        url: https://packagecloud.io/grafana/stable/el/7/$basearch
+        gpgkeys:
+          - https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana
 
   el6:
     platform:   el-6-x86_64
     hypervisor: vagrant
     box: centos/6
     mock_chroot: epel-6-x86_64
+    yum_repos:
+      grafana:
+        url: https://packagecloud.io/grafana/stable/el/7/$basearch
+        gpgkeys:
+          - https://grafanarel.s3.amazonaws.com/RPM-GPG-KEY-grafana
 
 CONFIG:
-  rpm_glob: 'simp-adapter-[0-9]*'
+  rpm_glob: 'simp-grafana-dashboards-[0-9]*'
   log_level: verbose
   type: aio
   vagrant_memsize: 256

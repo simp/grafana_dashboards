@@ -11,7 +11,7 @@ URL:       https://github.com/simp/simp-core
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 BuildArch: noarch
 
-Requires: simp-adapter >= 0.0.1
+Requires: simp-grafana-dashboards >= 0.0.1
 
 Provides: pupmod-%{modname} = 0.0.1-0
 Obsoletes: pupmod-%{modname} < 0.0.1-0
