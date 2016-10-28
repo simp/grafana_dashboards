@@ -1,0 +1,4 @@
+---                                                                                                                                                                                                                
+fixtures:                                                                                                                                                                                                          
+  repositories:
+    simp_grafana: "https://github.com/simp/pupmod-simp-simp_grafana" 

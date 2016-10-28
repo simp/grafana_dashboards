@@ -10,7 +10,7 @@ Requires: createrepo
 Requires: lsb
 Requires: httpd >= 2.2
 
-Requires: simp-adapter
+Requires: simp-grafana-dashboards
 
 Obsoletes: simp-hiera < 3.0.2
 
