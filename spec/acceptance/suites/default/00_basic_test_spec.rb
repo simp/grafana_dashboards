@@ -1,11 +1,12 @@
 require 'spec_helper_acceptance'
 
-test_name 'simp-adapter'
+test_name 'simp-grafana-dashboards'
 
-describe 'simp-adapter' do
+describe 'simp-grafana-dashboards' do
 
   rpm_src = File.join(fixtures_path,'dist')
   stub_rpm_src = File.join(fixtures_path,'test_module_rpms')
+  grafana_dir = "/var/lib/grafana/dashboards"
 
   local_yum_repo = '/srv/local_yum'
   local_yum_repo_conf =<<-EOM
@@ -30,7 +31,8 @@ repo_gpgcheck=0
       it 'should build cleanly' do
         Bundler.with_clean_env do
           %x{rake clean}
-          %x{rake pkg:rpm[#{host[:mock_chroot]},true]}
+          result = %x{rake pkg:rpm[#{host[:mock_chroot]},true]}
+          raise "RPM Build Failed" unless $? == 0 && result.empty?
         end
       end
     end
@@ -56,58 +58,25 @@ repo_gpgcheck=0
         host.install_package('createrepo')
         host.install_package('yum-utils')
         on(host, "cd #{local_yum_repo} && createrepo .")
-        create_remote_file(host, '/etc/yum.repos.d/beaker_local.repo', local_yum_repo_conf)
+        create_remote_file(host, '/etc/yum.repos.d/grafana_dashboards_local.repo', local_yum_repo_conf)
       end
 
       it 'should install cleanly' do
-        host.install_package('pupmod-simp-beakertest')
-        on(host, 'test -d /usr/share/simp/modules/beakertest')
+        host.install_package('simp-grafana-dashboards')
+        on(host, "test -d #{grafana_dir}")
+        # The home dashboard will always exist
+        on(host, "test -f #{grafana_dir}/home.json")
       end
 
-      it 'should copy the module data into the appropriate location' do
-        @install_target = host.puppet['codedir']
-        if !@install_target || install_target.empty?
-          @install_target = host.puppet['confdir']
-        end
-
-        on(host, "test -d #{@install_target}/environments/simp/modules/beakertest")
-        on(host, "diff --no-dereference -aqr /usr/share/simp/modules/beakertest #{@install_target}/environments/simp/modules/beakertest")
-      end
-
-      it 'should uninstall cleanly' do
-        host.uninstall_package('pupmod-simp-beakertest')
-        on(host, 'test ! -d /usr/share/simp/modules/beakertest')
-        on(host, "test ! -d #{@install_target}/environments/simp/modules/beakertest")
-      end
-    end
-
-    context "Installing with an already managed target" do
-      it 'should have a git managed beakertest module' do
-        host.mkdir_p("#{@install_target}/environments/simp/modules/beakertest")
-        on(host, "cd #{@install_target}/environments/simp/modules/beakertest && git init . && git add . && git commit -a -m woo")
-      end
-
-      it 'should install cleanly' do
-        host.install_package('pupmod-simp-beakertest')
-        on(host, 'test -d /usr/share/simp/modules/beakertest')
-      end
-
-      it 'should NOT copy the module data into the $codedir' do
-        on(host, "test -d #{@install_target}/environments/simp/modules/beakertest")
-        on(
-          host,
-          "diff --no-dereference -aqr /usr/share/simp/modules/beakertest #{@install_target}/environments/simp/modules/beakertest",
-          :acceptable_exit_codes => [1]
-        )
+      it 'should install all dashboards' do
+        on(host, "test -f #{grafana_dir}/ssh.json")
+        on(host, "test -f #{grafana_dir}/sudosh.json")
+        on(host, "test -f #{grafana_dir}/puppet-agent.json")
       end
 
       it 'should uninstall cleanly' do
-        host.uninstall_package('pupmod-simp-beakertest')
-        on(host, 'test ! -d /usr/share/simp/modules/beakertest')
-      end
-
-      it 'should NOT remove the functional module from the system' do
-        on(host, "test -d #{@install_target}/environments/simp/modules/beakertest")
+        host.uninstall_package('simp-grafana-dashboards')
+        on(host, 'test ! -f /var/lib/grafana/dashboards/*.json')
       end
     end
   end
