@@ -1,5 +1,5 @@
 {
-  "id": 8,
+  "id": 2,
   "title": "SIMP - Home",
   "tags": [
     "puppet",
@@ -18,7 +18,7 @@
       "height": "250px",
       "panels": [
         {
-          "content": "The SIMP Default dashboards are installed via an RPM on the file system of the grafana server.  They are static dashboards and cannot be modified.  They provide some basic stats of your SIMP cluster.    If you want to modify them, use the Grafana \"Save As\" feature.\n\nThe dashboards point to your default data source (no matter what it's called).  All you should have to do is add your data source (which is probably Elasticsearch) and the dashboards will work.  \n",
+          "content": "The SIMP default dashboards are installed via an RPM on the file system of the grafana server.  They are static dashboards and cannot be modified.  They provide some basic stats of your SIMP cluster.    If you want to modify them, use the Grafana \"Save As\" feature.\n\nThe dashboards point to your default data source (no matter what it's called).  All you should have to do is add your data source (which is probably Elasticsearch) and the dashboards will work.  \n\nEach SIMP dashboard is tagged as \"SIMP\" so you will see them listed in the window to the right of this one.\n",
           "editable": true,
           "error": false,
           "id": 6,
@@ -56,7 +56,7 @@
       "panels": [
         {
           "aliasColors": {},
-          "bars": false,
+          "bars": true,
           "datasource": null,
           "editable": true,
           "error": false,
@@ -65,9 +65,12 @@
             "threshold1": null,
             "threshold1Color": "rgba(216, 200, 27, 0.27)",
             "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+            "threshold2Color": "rgba(234, 112, 112, 0.22)",
+            "thresholdLine": false
           },
+          "hideTimeOverride": false,
           "id": 4,
+          "interval": "5m",
           "isNew": true,
           "legend": {
             "avg": false,
@@ -78,17 +81,23 @@
             "total": false,
             "values": false
           },
-          "lines": true,
-          "linewidth": 2,
+          "lines": false,
+          "linewidth": 1,
           "links": [],
-          "nullPointMode": "connected",
+          "nullPointMode": "null as zero",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 6,
-          "stack": false,
+          "seriesOverrides": [
+            {},
+            {
+              "alias": "nfsdcltrack",
+              "yaxis": 1
+            }
+          ],
+          "span": 4,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
@@ -100,7 +109,7 @@
                   "settings": {
                     "order": "asc",
                     "orderBy": "_term",
-                    "size": "10"
+                    "size": "0"
                   },
                   "type": "terms"
                 },
@@ -123,13 +132,120 @@
                   "type": "count"
                 }
               ],
+              "query": "logsource:$host_var AND program:*",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Log Count by Log Type",
+          "title": "Logs by Log Type",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 2,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "none",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": "",
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": true,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 3,
+          "interval": "5m",
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": false,
+          "linewidth": 2,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 4,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "fake": true,
+                  "field": "logsource.raw",
+                  "id": "3",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "0"
+                  },
+                  "type": "terms"
+                },
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:$program_var",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Log Count By Host",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -165,14 +281,15 @@
           "datasource": null,
           "editable": true,
           "error": false,
-          "fill": 1,
+          "fill": 0,
           "grid": {
             "threshold1": null,
             "threshold1Color": "rgba(216, 200, 27, 0.27)",
             "threshold2": null,
             "threshold2Color": "rgba(234, 112, 112, 0.22)"
           },
-          "id": 3,
+          "id": 10,
+          "interval": "5m",
           "isNew": true,
           "legend": {
             "avg": false,
@@ -184,7 +301,7 @@
             "values": false
           },
           "lines": true,
-          "linewidth": 2,
+          "linewidth": 1,
           "links": [],
           "nullPointMode": "connected",
           "percentage": false,
@@ -192,23 +309,12 @@
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [],
-          "span": 6,
+          "span": 4,
           "stack": false,
           "steppedLine": false,
           "targets": [
             {
               "bucketAggs": [
-                {
-                  "fake": true,
-                  "field": "logsource.raw",
-                  "id": "3",
-                  "settings": {
-                    "order": "asc",
-                    "orderBy": "_term",
-                    "size": "10"
-                  },
-                  "type": "terms"
-                },
                 {
                   "field": "@timestamp",
                   "id": "2",
@@ -228,13 +334,14 @@
                   "type": "count"
                 }
               ],
+              "query": "type:heartbeat",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Log Count By Host",
+          "title": "Logstash Heartbeat",
           "tooltip": {
             "msResolution": false,
             "shared": true,
@@ -293,7 +400,7 @@
             "col": 0,
             "desc": false
           },
-          "span": 2,
+          "span": 4,
           "styles": [],
           "targets": [
             {
@@ -320,7 +427,7 @@
                   "type": "cardinality"
                 }
               ],
-              "query": "",
+              "query": "logsource:$host_var AND program:$program_var",
               "refId": "A",
               "timeField": "@timestamp"
             }
@@ -350,7 +457,7 @@
             "col": 0,
             "desc": false
           },
-          "span": 2,
+          "span": 4,
           "styles": [],
           "targets": [
             {
@@ -377,6 +484,7 @@
                   "type": "cardinality"
                 }
               ],
+              "query": "program:$program_var",
               "refId": "A",
               "timeField": "@timestamp"
             }
@@ -390,7 +498,7 @@
     }
   ],
   "time": {
-    "from": "now-24h",
+    "from": "now/d",
     "to": "now"
   },
   "timepicker": {
@@ -419,14 +527,278 @@
     ]
   },
   "templating": {
-    "list": []
+    "list": [
+      {
+        "current": {
+          "value": [
+            "$__all"
+          ],
+          "text": "All"
+        },
+        "datasource": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Host",
+        "multi": true,
+        "name": "host_var",
+        "options": [
+          {
+            "text": "All",
+            "value": "$__all",
+            "selected": true
+          }
+        ],
+        "query": "{\"find\": \"terms\", \"field\": \"logsource.raw\"}",
+        "refresh": 1,
+        "type": "query"
+      },
+      {
+        "current": {
+          "value": [
+            "$__all"
+          ],
+          "text": "All"
+        },
+        "datasource": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Program",
+        "multi": true,
+        "name": "program_var",
+        "options": [
+          {
+            "text": "All",
+            "value": "$__all",
+            "selected": true
+          },
+          {
+            "text": "CROND",
+            "value": "CROND",
+            "selected": false
+          },
+          {
+            "text": "audispd",
+            "value": "audispd",
+            "selected": false
+          },
+          {
+            "text": "auditd",
+            "value": "auditd",
+            "selected": false
+          },
+          {
+            "text": "augenrules",
+            "value": "augenrules",
+            "selected": false
+          },
+          {
+            "text": "crond",
+            "value": "crond",
+            "selected": false
+          },
+          {
+            "text": "crontab",
+            "value": "crontab",
+            "selected": false
+          },
+          {
+            "text": "dbus",
+            "value": "dbus",
+            "selected": false
+          },
+          {
+            "text": "dbus-daemon",
+            "value": "dbus-daemon",
+            "selected": false
+          },
+          {
+            "text": "dhclient",
+            "value": "dhclient",
+            "selected": false
+          },
+          {
+            "text": "dhcpd",
+            "value": "dhcpd",
+            "selected": false
+          },
+          {
+            "text": "dnsmasq",
+            "value": "dnsmasq",
+            "selected": false
+          },
+          {
+            "text": "firefox.desktop",
+            "value": "firefox.desktop",
+            "selected": false
+          },
+          {
+            "text": "fprintd",
+            "value": "fprintd",
+            "selected": false
+          },
+          {
+            "text": "gnome-keyring-daemon",
+            "value": "gnome-keyring-daemon",
+            "selected": false
+          },
+          {
+            "text": "gnome-session",
+            "value": "gnome-session",
+            "selected": false
+          },
+          {
+            "text": "gnome-shell",
+            "value": "gnome-shell",
+            "selected": false
+          },
+          {
+            "text": "grafana-server",
+            "value": "grafana-server",
+            "selected": false
+          },
+          {
+            "text": "home_directories",
+            "value": "home_directories",
+            "selected": false
+          },
+          {
+            "text": "httpd",
+            "value": "httpd",
+            "selected": false
+          },
+          {
+            "text": "kernel",
+            "value": "kernel",
+            "selected": false
+          },
+          {
+            "text": "kibana",
+            "value": "kibana",
+            "selected": false
+          },
+          {
+            "text": "logstash",
+            "value": "logstash",
+            "selected": false
+          },
+          {
+            "text": "nfsdcltrack",
+            "value": "nfsdcltrack",
+            "selected": false
+          },
+          {
+            "text": "pcscd",
+            "value": "pcscd",
+            "selected": false
+          },
+          {
+            "text": "polkitd",
+            "value": "polkitd",
+            "selected": false
+          },
+          {
+            "text": "postfix/cleanup",
+            "value": "postfix/cleanup",
+            "selected": false
+          },
+          {
+            "text": "postfix/local",
+            "value": "postfix/local",
+            "selected": false
+          },
+          {
+            "text": "postfix/pickup",
+            "value": "postfix/pickup",
+            "selected": false
+          },
+          {
+            "text": "postfix/qmgr",
+            "value": "postfix/qmgr",
+            "selected": false
+          },
+          {
+            "text": "pulseaudio",
+            "value": "pulseaudio",
+            "selected": false
+          },
+          {
+            "text": "puppet-agent",
+            "value": "puppet-agent",
+            "selected": false
+          },
+          {
+            "text": "rpc.mountd",
+            "value": "rpc.mountd",
+            "selected": false
+          },
+          {
+            "text": "rpc.nfsd",
+            "value": "rpc.nfsd",
+            "selected": false
+          },
+          {
+            "text": "rpc.statd",
+            "value": "rpc.statd",
+            "selected": false
+          },
+          {
+            "text": "rtkit-daemon",
+            "value": "rtkit-daemon",
+            "selected": false
+          },
+          {
+            "text": "runuser",
+            "value": "runuser",
+            "selected": false
+          },
+          {
+            "text": "slapd",
+            "value": "slapd",
+            "selected": false
+          },
+          {
+            "text": "sm-notify",
+            "value": "sm-notify",
+            "selected": false
+          },
+          {
+            "text": "sshd",
+            "value": "sshd",
+            "selected": false
+          },
+          {
+            "text": "sudo",
+            "value": "sudo",
+            "selected": false
+          },
+          {
+            "text": "sudosh",
+            "value": "sudosh",
+            "selected": false
+          },
+          {
+            "text": "systemd",
+            "value": "systemd",
+            "selected": false
+          },
+          {
+            "text": "systemd-logind",
+            "value": "systemd-logind",
+            "selected": false
+          }
+        ],
+        "query": "{\"find\": \"terms\", \"field\": \"program.raw\"}",
+        "refresh": 1,
+        "type": "query"
+      }
+    ]
   },
   "annotations": {
     "list": []
   },
   "refresh": false,
   "schemaVersion": 12,
-  "version": 6,
+  "version": 24,
   "links": [],
   "gnetId": null
 }

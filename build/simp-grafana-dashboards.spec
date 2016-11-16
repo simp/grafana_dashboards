@@ -1,6 +1,6 @@
 Summary: Grafana dashboards developed for SIMP
 Name: simp-grafana-dashboards
-Version: 0.9.1
+Version: 1.0.0
 Release: 0
 License: Apache-2.0
 Group: Applications/System
@@ -41,5 +41,10 @@ install -p -m 640 -D src/*.json %{buildroot}%{prefix}
 # Post uninstall stuff
 
 %changelog
+* Wed Nov 15 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 1.0.0-0
+  - Updated existing dashboards
+  - Added auditd, yum, and selinux dashboards
+  - Added consistent default search times
+  - Ensured all datasources are set to default
 * Mon Sep 12 2016 Ralph Wright <ralph.wright@onyxpoint.com> - 0.9.1
   - Initial Grafana dashboards

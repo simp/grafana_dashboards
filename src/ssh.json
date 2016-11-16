@@ -1,5 +1,5 @@
 {
-  "id": 6,
+  "id": 4,
   "title": "SIMP - SSH",
   "tags": [
     "security",
@@ -19,7 +19,7 @@
       "panels": [
         {
           "aliasColors": {},
-          "bars": false,
+          "bars": true,
           "datasource": null,
           "decimals": 0,
           "editable": true,
@@ -33,6 +33,7 @@
           },
           "height": "",
           "id": 2,
+          "interval": "20m",
           "isNew": true,
           "legend": {
             "alignAsTable": false,
@@ -47,7 +48,7 @@
             "total": true,
             "values": true
           },
-          "lines": true,
+          "lines": false,
           "linewidth": 2,
           "links": [],
           "nullPointMode": "connected",
@@ -57,7 +58,7 @@
           "renderer": "flot",
           "seriesOverrides": [],
           "span": 12,
-          "stack": false,
+          "stack": true,
           "steppedLine": false,
           "targets": [
             {
@@ -233,10 +234,10 @@
           "scroll": true,
           "showHeader": true,
           "sort": {
-            "col": 0,
+            "col": 1,
             "desc": true
           },
-          "span": 4,
+          "span": 3,
           "styles": [
             {
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -264,7 +265,7 @@
                   "field": "user.raw",
                   "id": "2",
                   "settings": {
-                    "order": "asc",
+                    "order": "desc",
                     "orderBy": "_term",
                     "size": "10"
                   },
@@ -279,9 +280,9 @@
                   "type": "count"
                 }
               ],
+              "query": "logsource:$host_var AND program:sshd",
               "refId": "A",
-              "timeField": "@timestamp",
-              "query": "logsource:$host_var AND program:sshd"
+              "timeField": "@timestamp"
             }
           ],
           "title": "Top SSH Users",
@@ -309,10 +310,10 @@
           "scroll": true,
           "showHeader": true,
           "sort": {
-            "col": 0,
+            "col": 1,
             "desc": true
           },
-          "span": 4,
+          "span": 3,
           "styles": [
             {
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -355,12 +356,88 @@
                   "type": "count"
                 }
               ],
-              "query": "logsource:$host_var AND program:sshd AND failed",
+              "query": "logsource:$host_var AND program:sshd AND \"Failed\" AND from",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
           "title": "Failed Attempts By User",
+          "transform": "json",
+          "type": "table"
+        },
+        {
+          "columns": [
+            {
+              "text": "user.raw",
+              "value": "user.raw"
+            },
+            {
+              "text": "Count",
+              "value": "Count"
+            }
+          ],
+          "editable": true,
+          "error": false,
+          "fontSize": "100%",
+          "id": 9,
+          "isNew": true,
+          "links": [],
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 1,
+            "desc": true
+          },
+          "span": 3,
+          "styles": [
+            {
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "field": "user.raw",
+                  "id": "2",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "10"
+                  },
+                  "type": "terms"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:sshd AND \"Failed\" AND invalid",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "title": "Failed Attempts By Unknown User",
           "transform": "json",
           "type": "table"
         },
@@ -388,7 +465,7 @@
             "col": 1,
             "desc": true
           },
-          "span": 4,
+          "span": 3,
           "styles": [
             {
               "dateFormat": "YYYY-MM-DD HH:mm:ss",
@@ -454,6 +531,198 @@
           "title": "Top Source IPs",
           "transform": "json",
           "type": "table"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": true,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 8,
+          "interval": "1y",
+          "isNew": true,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 6,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "program:sshd AND \"invalid user\" AND failed",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "thresholds": ">10",
+          "title": "Unknown Users (Threshhold Example)",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "avg"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": true,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 7,
+          "interval": "1y",
+          "isNew": true,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 6,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "program:sshd AND \"Failed\" AND from",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "thresholds": ">10",
+          "title": "Failed (Threshhold Example)",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "avg"
         }
       ],
       "title": "New row"
@@ -461,7 +730,7 @@
     {
       "collapse": false,
       "editable": true,
-      "height": "250px",
+      "height": "450px",
       "panels": [
         {
           "columns": [
@@ -540,7 +809,7 @@
     }
   ],
   "time": {
-    "from": "now-24h",
+    "from": "now/d",
     "to": "now"
   },
   "timepicker": {
@@ -571,39 +840,28 @@
   "templating": {
     "list": [
       {
-        "type": "query",
+        "current": {
+          "value": [
+            "$__all"
+          ],
+          "text": "All"
+        },
         "datasource": null,
-        "refresh": 1,
-        "name": "host_var",
         "hide": 0,
+        "includeAll": true,
+        "label": "Host",
+        "multi": true,
+        "name": "host_var",
         "options": [
           {
             "text": "All",
             "value": "$__all",
             "selected": true
-          },
-          {
-            "text": "elg.test.org",
-            "value": "elg.test.org",
-            "selected": false
-          },
-          {
-            "text": "puppet.test.org",
-            "value": "puppet.test.org",
-            "selected": false
           }
         ],
-        "includeAll": true,
-        "multi": true,
-        "label": "Host",
         "query": "{\"find\": \"terms\", \"field\": \"logsource.raw\"}",
-        "current": {
-          "text": "All",
-          "value": [
-            "$__all"
-          ],
-          "tags": []
-        }
+        "refresh": 1,
+        "type": "query"
       }
     ]
   },
@@ -612,7 +870,7 @@
   },
   "refresh": false,
   "schemaVersion": 12,
-  "version": 6,
+  "version": 22,
   "links": [],
   "gnetId": null
 }

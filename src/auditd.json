@@ -1,9 +1,9 @@
 {
-  "id": 3,
-  "title": "SIMP - Puppet Agent",
+  "id": 7,
+  "title": "SIMP - Auditd",
   "tags": [
     "simp",
-    "puppet"
+    "security"
   ],
   "style": "dark",
   "timezone": "browser",
@@ -50,13 +50,24 @@
           "points": false,
           "renderer": "flot",
           "seriesOverrides": [],
-          "span": 12,
+          "span": 6,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
-              "alias": "Error",
+              "alias": "",
               "bucketAggs": [
+                {
+                  "fake": true,
+                  "field": "logsource.raw",
+                  "id": "3",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "10"
+                  },
+                  "type": "terms"
+                },
                 {
                   "field": "@timestamp",
                   "id": "2",
@@ -76,94 +87,353 @@
                   "type": "count"
                 }
               ],
-              "query": "logsource:$host_var AND program:puppet-agent AND severity_label:Error",
+              "query": "logsource:$host_var AND program:audispd",
               "refId": "A",
-              "timeField": "@timestamp"
-            },
-            {
-              "alias": "Informational",
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "select field",
-                  "id": "1",
-                  "type": "count"
-                }
-              ],
-              "query": "logsource:$host_var AND program:puppet-agent AND severity_label:Informational",
-              "refId": "B",
-              "timeField": "@timestamp"
-            },
-            {
-              "alias": "Warning",
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "select field",
-                  "id": "1",
-                  "type": "count"
-                }
-              ],
-              "query": "logsource:$host_var AND program:puppet-agent AND severity_label:Warning",
-              "refId": "C",
-              "timeField": "@timestamp"
-            },
-            {
-              "alias": "Notice",
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "select field",
-                  "id": "1",
-                  "type": "count"
-                }
-              ],
-              "query": "logsource:$host_var AND program:puppet-agent AND severity_label:Notice",
-              "refId": "D",
               "timeField": "@timestamp"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Puppet Logs by Type",
+          "title": "Audit Logs by Host",
           "tooltip": {
             "msResolution": true,
+            "shared": false,
+            "sort": 1,
+            "value_type": "individual"
+          },
+          "type": "graph",
+          "xaxis": {
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 22,
+          "interval": "15m",
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "fake": true,
+                  "field": "audit_type.raw",
+                  "id": "3",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "10"
+                  },
+                  "type": "terms"
+                },
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_type:$audit_type_var",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Audit Event Types",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 0,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 24,
+          "interval": "15m",
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "fake": true,
+                  "field": "audit_syscall.raw",
+                  "id": "3",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "10"
+                  },
+                  "type": "terms"
+                },
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_syscall:$audit_syscall_var",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Audit Syscalls",
+          "tooltip": {
+            "msResolution": false,
+            "shared": true,
+            "sort": 0,
+            "value_type": "cumulative"
+          },
+          "type": "graph",
+          "xaxis": {
+            "show": true
+          },
+          "yaxes": [
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            },
+            {
+              "format": "short",
+              "label": null,
+              "logBase": 1,
+              "max": null,
+              "min": null,
+              "show": true
+            }
+          ]
+        },
+        {
+          "aliasColors": {},
+          "bars": false,
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "fill": 1,
+          "grid": {
+            "threshold1": null,
+            "threshold1Color": "rgba(216, 200, 27, 0.27)",
+            "threshold2": null,
+            "threshold2Color": "rgba(234, 112, 112, 0.22)"
+          },
+          "id": 33,
+          "interval": "15m",
+          "isNew": true,
+          "legend": {
+            "avg": false,
+            "current": false,
+            "max": false,
+            "min": false,
+            "show": true,
+            "total": false,
+            "values": false
+          },
+          "lines": true,
+          "linewidth": 1,
+          "links": [],
+          "nullPointMode": "connected",
+          "percentage": false,
+          "pointradius": 5,
+          "points": false,
+          "renderer": "flot",
+          "seriesOverrides": [],
+          "span": 6,
+          "stack": false,
+          "steppedLine": false,
+          "targets": [
+            {
+              "alias": "GDM Logins",
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_type:USER_AUTH AND audit_exe:*gdm*",
+              "refId": "A",
+              "timeField": "@timestamp"
+            },
+            {
+              "alias": "SSH Logins",
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_type:USER_AUTH AND audit_exe:*ssh*",
+              "refId": "B",
+              "timeField": "@timestamp"
+            }
+          ],
+          "timeFrom": null,
+          "timeShift": null,
+          "title": "Logins by Type",
+          "tooltip": {
+            "msResolution": false,
             "shared": true,
             "sort": 0,
             "value_type": "cumulative"
@@ -219,105 +489,7 @@
             "thresholdLabels": false,
             "thresholdMarkers": true
           },
-          "id": 20,
-          "interval": "1y",
-          "isNew": true,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 2,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": true
-          },
-          "targets": [
-            {
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "logsource.raw",
-                  "id": "1",
-                  "meta": {},
-                  "settings": {},
-                  "type": "count"
-                }
-              ],
-              "query": "logsource:$host_var AND program:puppet-agent message:\"Finished catalog run\"",
-              "refId": "A",
-              "timeField": "@timestamp"
-            }
-          ],
-          "thresholds": "",
-          "title": "Completed Puppet Runs",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "id": 17,
+          "id": 30,
           "interval": "1y",
           "isNew": true,
           "links": [],
@@ -377,13 +549,209 @@
                   "type": "count"
                 }
               ],
-              "query": "logsource:$host_var AND program:puppet-agent AND \"Triggered 'refresh'\"",
+              "query": "logsource:$host_var AND program:audispd AND audit_type:USER_AUTH AND audit_res=failed",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
           "thresholds": "",
-          "title": "Service Refresh Events",
+          "title": "Failed Authentication",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "avg"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 29,
+          "interval": "1y",
+          "isNew": true,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 2,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "puppet_killed_service.raw",
+                  "id": "1",
+                  "meta": {},
+                  "settings": {},
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_exe:\"/usr/bin/su\" AND audit_res=failed",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "thresholds": "",
+          "title": "Failed SU Attempts",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "avg"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 28,
+          "interval": "1y",
+          "isNew": true,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 2,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "puppet_killed_service.raw",
+                  "id": "1",
+                  "meta": {},
+                  "settings": {},
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_exe:*sudo* AND audit_res=failed",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "thresholds": "",
+          "title": "Failed Sudo Attempts",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -475,13 +843,13 @@
                   "type": "count"
                 }
               ],
-              "query": "logsource:$host_var AND program:puppet-agent AND \"to 'running'\"",
+              "query": "logsource:$host_var AND program:audispd AND audit_type:AVC",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
           "thresholds": "",
-          "title": "Services Started by Puppet",
+          "title": "SELinux Violations",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -498,9 +866,9 @@
           "colorBackground": false,
           "colorValue": false,
           "colors": [
-            "rgba(51, 112, 49, 0.82)",
+            "rgba(245, 54, 54, 0.9)",
             "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.9)"
+            "rgba(50, 172, 45, 0.97)"
           ],
           "datasource": null,
           "editable": true,
@@ -509,11 +877,109 @@
           "gauge": {
             "maxValue": 100,
             "minValue": 0,
-            "show": true,
+            "show": false,
             "thresholdLabels": false,
             "thresholdMarkers": true
           },
-          "id": 19,
+          "id": 25,
+          "interval": "1y",
+          "isNew": true,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 2,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "puppet_killed_service.raw",
+                  "id": "1",
+                  "meta": {},
+                  "settings": {},
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_res:failed",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "thresholds": "",
+          "title": "Failed Events (non syscalls)",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "avg"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 20,
           "interval": "1y",
           "isNew": true,
           "links": [],
@@ -570,212 +1036,16 @@
                   "id": "1",
                   "meta": {},
                   "settings": {},
-                  "type": "cardinality"
-                }
-              ],
-              "query": "logsource:$host_var AND program:puppet-agent AND severity_label=error",
-              "refId": "A",
-              "timeField": "@timestamp"
-            }
-          ],
-          "thresholds": ">5",
-          "title": "Puppet Clients With Errors",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "id": 21,
-          "interval": "1y",
-          "isNew": true,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 2,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": true
-          },
-          "targets": [
-            {
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "puppet_killed_service.raw",
-                  "id": "1",
-                  "meta": {},
-                  "settings": {},
                   "type": "count"
                 }
               ],
-              "query": "logsource:$host_var AND program:puppet-agent AND message:\"content changed\"",
+              "query": "logsource:$host_var AND program:audispd AND audit_sucess=no AND audit_syscall:$audit_syscall_var",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
           "thresholds": "",
-          "title": "Puppet File Changes",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(69, 179, 46, 0.8)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(245, 54, 54, 0.5)"
-          ],
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "id": 16,
-          "interval": "1y",
-          "isNew": true,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 2,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": true
-          },
-          "targets": [
-            {
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "puppet_killed_service.raw",
-                  "id": "1",
-                  "meta": {},
-                  "settings": {},
-                  "type": "cardinality"
-                }
-              ],
-              "query": "logsource:$host_var AND program:puppet-agent AND svckill",
-              "refId": "A",
-              "timeField": "@timestamp"
-            }
-          ],
-          "thresholds": "",
-          "title": "Puppet Services Killed (Unique)",
+          "title": "Failed Syscalls",
           "type": "singlestat",
           "valueFontSize": "80%",
           "valueMaps": [
@@ -798,30 +1068,22 @@
         {
           "columns": [
             {
-              "text": "timestamp",
-              "value": "timestamp"
-            },
-            {
-              "text": "logsource",
-              "value": "logsource"
-            },
-            {
-              "text": "puppet_agent_runtime",
-              "value": "puppet_agent_runtime"
+              "text": "Total",
+              "value": "total"
             }
           ],
           "editable": true,
           "error": false,
           "fontSize": "100%",
-          "id": 5,
-          "interval": "20m",
+          "id": 26,
+          "interval": "1y",
           "isNew": true,
           "links": [],
           "pageSize": null,
           "scroll": true,
           "showHeader": true,
           "sort": {
-            "col": 2,
+            "col": 1,
             "desc": true
           },
           "span": 4,
@@ -847,187 +1109,94 @@
           ],
           "targets": [
             {
-              "bucketAggs": [],
+              "bucketAggs": [
+                {
+                  "fake": true,
+                  "field": "audit_exe.raw",
+                  "id": "3",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "10"
+                  },
+                  "type": "terms"
+                },
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
               "dsType": "elasticsearch",
               "metrics": [
                 {
                   "field": "select field",
                   "id": "1",
-                  "meta": {},
-                  "settings": {},
-                  "type": "raw_document"
+                  "type": "count"
                 }
               ],
-              "query": "logsource:$host_var AND program:puppet-agent AND puppet_agent_runtime: [* TO *]",
+              "query": "logsource:$host_var AND program:audispd AND audit_sucess=no AND audit_syscall:$audit_syscall_var",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
-          "timeFrom": "20m",
-          "timeShift": null,
-          "title": "Agent Runtime",
-          "transform": "json",
+          "title": "Top Executables Causing Failures",
+          "transform": "timeseries_aggregations",
           "type": "table"
         },
         {
-          "aliasColors": {},
-          "bars": false,
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "fill": 0,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 15,
-          "interval": "30m",
-          "isNew": true,
-          "legend": {
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "show": true,
-            "total": false,
-            "values": false
-          },
-          "lines": true,
-          "linewidth": 1,
-          "links": [],
-          "nullPointMode": "null",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 8,
-          "stack": false,
-          "steppedLine": false,
-          "targets": [
+          "columns": [
             {
-              "bucketAggs": [
-                {
-                  "fake": true,
-                  "field": "puppet_killed_service.raw",
-                  "id": "3",
-                  "settings": {
-                    "order": "asc",
-                    "orderBy": "_term",
-                    "size": "10"
-                  },
-                  "type": "terms"
-                },
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "select field",
-                  "id": "1",
-                  "type": "count"
-                }
-              ],
-              "query": "logsource:$host_var AND program:puppet-agent AND svckill",
-              "refId": "B",
-              "timeField": "@timestamp"
+              "text": "Total",
+              "value": "total"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Killed Services",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "cumulative"
-          },
-          "type": "graph",
-          "xaxis": {
-            "show": true
-          },
-          "yaxes": [
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            },
-            {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
-            }
-          ]
-        }
-      ],
-      "title": "New row"
-    },
-    {
-      "collapse": false,
-      "editable": true,
-      "height": "250px",
-      "panels": [
-        {
-          "aliasColors": {},
-          "bars": true,
-          "datasource": null,
           "editable": true,
           "error": false,
-          "fill": 1,
-          "grid": {
-            "threshold1": null,
-            "threshold1Color": "rgba(216, 200, 27, 0.27)",
-            "threshold2": null,
-            "threshold2Color": "rgba(234, 112, 112, 0.22)"
-          },
-          "id": 11,
+          "fontSize": "100%",
+          "id": 31,
+          "interval": "1y",
           "isNew": true,
-          "legend": {
-            "alignAsTable": false,
-            "avg": false,
-            "current": false,
-            "max": false,
-            "min": false,
-            "rightSide": false,
-            "show": true,
-            "total": true,
-            "values": true
-          },
-          "lines": false,
-          "linewidth": 2,
           "links": [],
-          "nullPointMode": "connected",
-          "percentage": false,
-          "pointradius": 5,
-          "points": false,
-          "renderer": "flot",
-          "seriesOverrides": [],
-          "span": 12,
-          "stack": false,
-          "steppedLine": false,
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
+          },
+          "span": 2,
+          "styles": [
+            {
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
           "targets": [
             {
               "bucketAggs": [
                 {
                   "fake": true,
-                  "field": "logsource.raw",
+                  "field": "audit_auid.raw",
                   "id": "3",
                   "settings": {
                     "order": "asc",
@@ -1055,42 +1224,191 @@
                   "type": "count"
                 }
               ],
-              "query": "logsource:$host_var AND \"Disabling Puppet\"",
+              "query": "logsource:$host_var AND program:audispd AND audit_type:USER_AUTH AND audit_res=failed",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
-          "timeFrom": null,
-          "timeShift": null,
-          "title": "Manually Disabled Clients",
-          "tooltip": {
-            "msResolution": false,
-            "shared": true,
-            "sort": 0,
-            "value_type": "cumulative"
+          "title": "Top  Users Failing Auth",
+          "transform": "timeseries_aggregations",
+          "type": "table"
+        },
+        {
+          "columns": [],
+          "editable": true,
+          "error": false,
+          "fontSize": "100%",
+          "id": 32,
+          "interval": "1y",
+          "isNew": true,
+          "links": [],
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 0,
+            "desc": true
           },
-          "type": "graph",
-          "xaxis": {
-            "show": true
-          },
-          "yaxes": [
+          "span": 4,
+          "styles": [
             {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
             },
             {
-              "format": "short",
-              "label": null,
-              "logBase": 1,
-              "max": null,
-              "min": null,
-              "show": true
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
             }
-          ]
+          ],
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "fake": true,
+                  "field": "audit_auid.raw",
+                  "id": "3",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "10"
+                  },
+                  "type": "terms"
+                },
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_type:USER_AUTH",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "title": "Top  Users Failing Auth",
+          "transform": "timeseries_to_rows",
+          "type": "table"
+        },
+        {
+          "cacheTimeout": null,
+          "colorBackground": false,
+          "colorValue": false,
+          "colors": [
+            "rgba(245, 54, 54, 0.9)",
+            "rgba(237, 129, 40, 0.89)",
+            "rgba(50, 172, 45, 0.97)"
+          ],
+          "datasource": null,
+          "editable": true,
+          "error": false,
+          "format": "none",
+          "gauge": {
+            "maxValue": 100,
+            "minValue": 0,
+            "show": false,
+            "thresholdLabels": false,
+            "thresholdMarkers": true
+          },
+          "id": 34,
+          "interval": "1y",
+          "isNew": true,
+          "links": [],
+          "mappingType": 1,
+          "mappingTypes": [
+            {
+              "name": "value to text",
+              "value": 1
+            },
+            {
+              "name": "range to text",
+              "value": 2
+            }
+          ],
+          "maxDataPoints": 100,
+          "nullPointMode": "connected",
+          "nullText": null,
+          "postfix": "",
+          "postfixFontSize": "50%",
+          "prefix": "",
+          "prefixFontSize": "50%",
+          "rangeMaps": [
+            {
+              "from": "null",
+              "text": "N/A",
+              "to": "null"
+            }
+          ],
+          "span": 2,
+          "sparkline": {
+            "fillColor": "rgba(31, 118, 189, 0.18)",
+            "full": false,
+            "lineColor": "rgb(31, 120, 193)",
+            "show": false
+          },
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "audit_uid.raw",
+                  "id": "1",
+                  "meta": {},
+                  "settings": {},
+                  "type": "cardinality"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "thresholds": "",
+          "title": "Numer of Unique UIDs",
+          "type": "singlestat",
+          "valueFontSize": "80%",
+          "valueMaps": [
+            {
+              "op": "=",
+              "text": "N/A",
+              "value": "null"
+            }
+          ],
+          "valueName": "avg"
         }
       ],
       "title": "New row"
@@ -1162,12 +1480,12 @@
                   "type": "raw_document"
                 }
               ],
-              "query": "logsource:$host_var AND program:puppet-agent",
+              "query": "logsource:$host_var AND program:audispd",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
-          "title": "Raw Puppet Logs",
+          "title": "Raw Auditt Logs",
           "transform": "json",
           "type": "table"
         }
@@ -1176,7 +1494,7 @@
     }
   ],
   "time": {
-    "from": "now/d",
+    "from": "now/w",
     "to": "now"
   },
   "timepicker": {
@@ -1228,6 +1546,291 @@
         "refresh": 1,
         "regex": "",
         "type": "query"
+      },
+      {
+        "current": {
+          "value": [
+            "$__all"
+          ],
+          "text": "All"
+        },
+        "datasource": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Audit Type",
+        "multi": true,
+        "name": "audit_type_var",
+        "options": [
+          {
+            "text": "All",
+            "value": "$__all",
+            "selected": true
+          },
+          {
+            "text": "ADD_GROUP",
+            "value": "ADD_GROUP",
+            "selected": false
+          },
+          {
+            "text": "ADD_USER",
+            "value": "ADD_USER",
+            "selected": false
+          },
+          {
+            "text": "AVC",
+            "value": "AVC",
+            "selected": false
+          },
+          {
+            "text": "CRED_ACQ",
+            "value": "CRED_ACQ",
+            "selected": false
+          },
+          {
+            "text": "CRED_DISP",
+            "value": "CRED_DISP",
+            "selected": false
+          },
+          {
+            "text": "CRED_REFR",
+            "value": "CRED_REFR",
+            "selected": false
+          },
+          {
+            "text": "CWD",
+            "value": "CWD",
+            "selected": false
+          },
+          {
+            "text": "GRP_MGMT",
+            "value": "GRP_MGMT",
+            "selected": false
+          },
+          {
+            "text": "LOGIN",
+            "value": "LOGIN",
+            "selected": false
+          },
+          {
+            "text": "PATH",
+            "value": "PATH",
+            "selected": false
+          },
+          {
+            "text": "SERVICE_START",
+            "value": "SERVICE_START",
+            "selected": false
+          },
+          {
+            "text": "SERVICE_STOP",
+            "value": "SERVICE_STOP",
+            "selected": false
+          },
+          {
+            "text": "SYSCALL",
+            "value": "SYSCALL",
+            "selected": false
+          },
+          {
+            "text": "USER_ACCT",
+            "value": "USER_ACCT",
+            "selected": false
+          },
+          {
+            "text": "USER_AUTH",
+            "value": "USER_AUTH",
+            "selected": false
+          },
+          {
+            "text": "USER_CMD",
+            "value": "USER_CMD",
+            "selected": false
+          },
+          {
+            "text": "USER_END",
+            "value": "USER_END",
+            "selected": false
+          },
+          {
+            "text": "USER_LOGIN",
+            "value": "USER_LOGIN",
+            "selected": false
+          },
+          {
+            "text": "USER_START",
+            "value": "USER_START",
+            "selected": false
+          }
+        ],
+        "query": "{\"find\": \"terms\", \"field\": \"audit_type.raw\"}",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
+      },
+      {
+        "current": {
+          "value": [
+            "$__all"
+          ],
+          "text": "All"
+        },
+        "datasource": null,
+        "hide": 0,
+        "includeAll": true,
+        "label": "Audit Syscall",
+        "multi": true,
+        "name": "audit_syscall_var",
+        "options": [
+          {
+            "text": "All",
+            "value": "$__all",
+            "selected": true
+          },
+          {
+            "text": "105",
+            "value": "105",
+            "selected": false
+          },
+          {
+            "text": "112",
+            "value": "112",
+            "selected": false
+          },
+          {
+            "text": "133",
+            "value": "133",
+            "selected": false
+          },
+          {
+            "text": "135",
+            "value": "135",
+            "selected": false
+          },
+          {
+            "text": "165",
+            "value": "165",
+            "selected": false
+          },
+          {
+            "text": "166",
+            "value": "166",
+            "selected": false
+          },
+          {
+            "text": "188",
+            "value": "188",
+            "selected": false
+          },
+          {
+            "text": "189",
+            "value": "189",
+            "selected": false
+          },
+          {
+            "text": "190",
+            "value": "190",
+            "selected": false
+          },
+          {
+            "text": "191",
+            "value": "191",
+            "selected": false
+          },
+          {
+            "text": "192",
+            "value": "192",
+            "selected": false
+          },
+          {
+            "text": "197",
+            "value": "197",
+            "selected": false
+          },
+          {
+            "text": "2",
+            "value": "2",
+            "selected": false
+          },
+          {
+            "text": "260",
+            "value": "260",
+            "selected": false
+          },
+          {
+            "text": "263",
+            "value": "263",
+            "selected": false
+          },
+          {
+            "text": "268",
+            "value": "268",
+            "selected": false
+          },
+          {
+            "text": "59",
+            "value": "59",
+            "selected": false
+          },
+          {
+            "text": "82",
+            "value": "82",
+            "selected": false
+          },
+          {
+            "text": "83",
+            "value": "83",
+            "selected": false
+          },
+          {
+            "text": "84",
+            "value": "84",
+            "selected": false
+          },
+          {
+            "text": "86",
+            "value": "86",
+            "selected": false
+          },
+          {
+            "text": "87",
+            "value": "87",
+            "selected": false
+          },
+          {
+            "text": "88",
+            "value": "88",
+            "selected": false
+          },
+          {
+            "text": "90",
+            "value": "90",
+            "selected": false
+          },
+          {
+            "text": "91",
+            "value": "91",
+            "selected": false
+          },
+          {
+            "text": "92",
+            "value": "92",
+            "selected": false
+          },
+          {
+            "text": "93",
+            "value": "93",
+            "selected": false
+          },
+          {
+            "text": "94",
+            "value": "94",
+            "selected": false
+          }
+        ],
+        "query": "{\"find\": \"terms\", \"field\": \"audit_syscall.raw\"}",
+        "refresh": 1,
+        "regex": "",
+        "type": "query"
       }
     ]
   },
@@ -1236,7 +1839,7 @@
   },
   "refresh": false,
   "schemaVersion": 12,
-  "version": 49,
+  "version": 56,
   "links": [],
   "gnetId": null
 }

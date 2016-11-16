@@ -1,8 +1,7 @@
 {
-  "id": 5,
-  "title": "SIMP - Sudosh",
+  "id": 9,
+  "title": "SIMP - SeLinux",
   "tags": [
-    "ssh",
     "simp",
     "security"
   ],
@@ -19,63 +18,45 @@
       "panels": [
         {
           "aliasColors": {},
-          "bars": true,
+          "bars": false,
           "datasource": null,
-          "decimals": 0,
           "editable": true,
           "error": false,
-          "fill": 0,
+          "fill": 1,
           "grid": {
             "threshold1": null,
             "threshold1Color": "rgba(216, 200, 27, 0.27)",
             "threshold2": null,
             "threshold2Color": "rgba(234, 112, 112, 0.22)"
           },
-          "height": "",
-          "id": 2,
-          "interval": "10m",
+          "id": 13,
+          "interval": "30m",
           "isNew": true,
           "legend": {
-            "alignAsTable": false,
             "avg": false,
             "current": false,
-            "hideEmpty": false,
-            "hideZero": false,
             "max": false,
             "min": false,
-            "rightSide": false,
             "show": true,
             "total": false,
             "values": false
           },
-          "lines": false,
-          "linewidth": 5,
+          "lines": true,
+          "linewidth": 1,
           "links": [],
           "nullPointMode": "connected",
           "percentage": false,
           "pointradius": 5,
           "points": false,
           "renderer": "flot",
-          "seriesOverrides": [
-            {}
-          ],
+          "seriesOverrides": [],
           "span": 12,
           "stack": true,
           "steppedLine": false,
           "targets": [
             {
+              "alias": "Read",
               "bucketAggs": [
-                {
-                  "fake": true,
-                  "field": "logsource.raw",
-                  "id": "3",
-                  "settings": {
-                    "order": "asc",
-                    "orderBy": "_term",
-                    "size": "10"
-                  },
-                  "type": "terms"
-                },
                 {
                   "field": "@timestamp",
                   "id": "2",
@@ -95,18 +76,44 @@
                   "type": "count"
                 }
               ],
-              "query": "logsource:$host_var program:sudosh",
+              "query": "logsource:$host_var AND program:audispd AND audit_type:AVC AND audit_se_action:read",
               "refId": "A",
+              "timeField": "@timestamp"
+            },
+            {
+              "alias": "Write",
+              "bucketAggs": [
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_type:AVC and audit_se_action:write",
+              "refId": "B",
               "timeField": "@timestamp"
             }
           ],
           "timeFrom": null,
           "timeShift": null,
-          "title": "Sudosh Logs By Host",
+          "title": "SELinux Violations",
           "tooltip": {
             "msResolution": true,
-            "shared": true,
-            "sort": 0,
+            "shared": false,
+            "sort": 1,
             "value_type": "individual"
           },
           "type": "graph",
@@ -141,227 +148,24 @@
       "height": "250px",
       "panels": [
         {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": false
-          },
-          "id": 15,
-          "interval": "1y",
-          "isNew": true,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 4,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.21)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": true
-          },
-          "targets": [
-            {
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "auto",
-                    "min_doc_count": 0,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "sudosh_session_id.raw",
-                  "id": "1",
-                  "meta": {},
-                  "settings": {},
-                  "type": "cardinality"
-                }
-              ],
-              "query": "program:sudosh",
-              "refId": "A",
-              "timeField": "@timestamp"
-            }
-          ],
-          "thresholds": "",
-          "title": "Sudosh Sessions (24 Hours)",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
-          "cacheTimeout": null,
-          "colorBackground": false,
-          "colorValue": false,
-          "colors": [
-            "rgba(245, 54, 54, 0.9)",
-            "rgba(237, 129, 40, 0.89)",
-            "rgba(50, 172, 45, 0.97)"
-          ],
-          "datasource": null,
-          "editable": true,
-          "error": false,
-          "format": "none",
-          "gauge": {
-            "maxValue": 100,
-            "minValue": 0,
-            "show": false,
-            "thresholdLabels": false,
-            "thresholdMarkers": true
-          },
-          "id": 16,
-          "interval": null,
-          "isNew": true,
-          "links": [],
-          "mappingType": 1,
-          "mappingTypes": [
-            {
-              "name": "value to text",
-              "value": 1
-            },
-            {
-              "name": "range to text",
-              "value": 2
-            }
-          ],
-          "maxDataPoints": 100,
-          "nullPointMode": "connected",
-          "nullText": null,
-          "postfix": "",
-          "postfixFontSize": "50%",
-          "prefix": "",
-          "prefixFontSize": "50%",
-          "rangeMaps": [
-            {
-              "from": "null",
-              "text": "N/A",
-              "to": "null"
-            }
-          ],
-          "span": 4,
-          "sparkline": {
-            "fillColor": "rgba(31, 118, 189, 0.18)",
-            "full": false,
-            "lineColor": "rgb(31, 120, 193)",
-            "show": true
-          },
-          "targets": [
-            {
-              "bucketAggs": [
-                {
-                  "field": "@timestamp",
-                  "id": "2",
-                  "settings": {
-                    "interval": "1d",
-                    "min_doc_count": 1,
-                    "trimEdges": 0
-                  },
-                  "type": "date_histogram"
-                }
-              ],
-              "dsType": "elasticsearch",
-              "metrics": [
-                {
-                  "field": "user.raw",
-                  "id": "1",
-                  "meta": {},
-                  "settings": {},
-                  "type": "cardinality"
-                }
-              ],
-              "query": "program:sudosh",
-              "refId": "A",
-              "timeField": "@timestamp"
-            }
-          ],
-          "thresholds": "",
-          "title": "Sudosh Users (24 Hours)",
-          "type": "singlestat",
-          "valueFontSize": "80%",
-          "valueMaps": [
-            {
-              "op": "=",
-              "text": "N/A",
-              "value": "null"
-            }
-          ],
-          "valueName": "avg"
-        },
-        {
           "columns": [
             {
-              "text": "user",
-              "value": "user"
-            },
-            {
-              "text": "logsource",
-              "value": "logsource"
-            },
-            {
-              "text": "sudosh_session_id",
-              "value": "sudosh_session_id"
+              "text": "Total",
+              "value": "total"
             }
           ],
           "editable": true,
           "error": false,
           "fontSize": "100%",
-          "id": 17,
+          "id": 26,
+          "interval": "1y",
           "isNew": true,
           "links": [],
           "pageSize": null,
           "scroll": true,
           "showHeader": true,
           "sort": {
-            "col": 0,
+            "col": 1,
             "desc": true
           },
           "span": 4,
@@ -387,24 +191,128 @@
           ],
           "targets": [
             {
-              "bucketAggs": [],
+              "bucketAggs": [
+                {
+                  "fake": true,
+                  "field": "audit_comm.raw",
+                  "id": "3",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "10"
+                  },
+                  "type": "terms"
+                },
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
               "dsType": "elasticsearch",
               "metrics": [
                 {
                   "field": "select field",
                   "id": "1",
-                  "meta": {},
-                  "settings": {},
-                  "type": "raw_document"
+                  "type": "count"
                 }
               ],
-              "query": "program:sudosh AND starting",
+              "query": "logsource:$host_var AND program:audispd AND audit_type:AVC AND audit_se_status:denied",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
-          "title": "Sudosh Session IDs",
-          "transform": "json",
+          "title": "Violating Commands",
+          "transform": "timeseries_aggregations",
+          "type": "table"
+        },
+        {
+          "columns": [
+            {
+              "text": "Total",
+              "value": "total"
+            }
+          ],
+          "editable": true,
+          "error": false,
+          "fontSize": "100%",
+          "id": 31,
+          "interval": "1y",
+          "isNew": true,
+          "links": [],
+          "pageSize": null,
+          "scroll": true,
+          "showHeader": true,
+          "sort": {
+            "col": 1,
+            "desc": true
+          },
+          "span": 2,
+          "styles": [
+            {
+              "dateFormat": "YYYY-MM-DD HH:mm:ss",
+              "pattern": "Time",
+              "type": "date"
+            },
+            {
+              "colorMode": null,
+              "colors": [
+                "rgba(245, 54, 54, 0.9)",
+                "rgba(237, 129, 40, 0.89)",
+                "rgba(50, 172, 45, 0.97)"
+              ],
+              "decimals": 2,
+              "pattern": "/.*/",
+              "thresholds": [],
+              "type": "number",
+              "unit": "short"
+            }
+          ],
+          "targets": [
+            {
+              "bucketAggs": [
+                {
+                  "fake": true,
+                  "field": "audit_se_suser.raw",
+                  "id": "3",
+                  "settings": {
+                    "order": "asc",
+                    "orderBy": "_term",
+                    "size": "10"
+                  },
+                  "type": "terms"
+                },
+                {
+                  "field": "@timestamp",
+                  "id": "2",
+                  "settings": {
+                    "interval": "auto",
+                    "min_doc_count": 0,
+                    "trimEdges": 0
+                  },
+                  "type": "date_histogram"
+                }
+              ],
+              "dsType": "elasticsearch",
+              "metrics": [
+                {
+                  "field": "select field",
+                  "id": "1",
+                  "type": "count"
+                }
+              ],
+              "query": "logsource:$host_var AND program:audispd AND audit_type:AVC",
+              "refId": "A",
+              "timeField": "@timestamp"
+            }
+          ],
+          "title": "Top  Violating Users",
+          "transform": "timeseries_aggregations",
           "type": "table"
         }
       ],
@@ -413,7 +321,7 @@
     {
       "collapse": false,
       "editable": true,
-      "height": "500px",
+      "height": "700px",
       "panels": [
         {
           "columns": [
@@ -426,16 +334,24 @@
               "value": "logsource"
             },
             {
-              "text": "sudosh_type",
-              "value": "sudosh_type"
+              "text": "audit_se_status",
+              "value": "audit_se_status"
             },
             {
-              "text": "user",
-              "value": "user"
+              "text": "audit_se_suser",
+              "value": "audit_se_suser"
             },
             {
-              "text": "sudosh_message",
-              "value": "sudosh_message"
+              "text": "audit_se_action",
+              "value": "audit_se_action"
+            },
+            {
+              "text": "audit_se_srole",
+              "value": "audit_se_srole"
+            },
+            {
+              "text": "audit_comm",
+              "value": "audit_comm"
             }
           ],
           "editable": true,
@@ -476,7 +392,6 @@
             {
               "bucketAggs": [],
               "dsType": "elasticsearch",
-              "hide": false,
               "metrics": [
                 {
                   "field": "select field",
@@ -486,12 +401,12 @@
                   "type": "raw_document"
                 }
               ],
-              "query": "logsource:$host_var AND program:sudosh AND sudosh_session_id:$sudosh_session_id_var",
+              "query": "logsource:$host_var AND program:audispd AND audit_type:AVC",
               "refId": "A",
               "timeField": "@timestamp"
             }
           ],
-          "title": "Raw Sudosh Logs",
+          "title": "Raw SELinux Logs",
           "transform": "json",
           "type": "table"
         }
@@ -500,7 +415,7 @@
     }
   ],
   "time": {
-    "from": "now/d",
+    "from": "now/w",
     "to": "now"
   },
   "timepicker": {
@@ -532,10 +447,8 @@
     "list": [
       {
         "current": {
-          "value": [
-            "$__all"
-          ],
-          "text": "All"
+          "text": "All",
+          "value": "$__all"
         },
         "datasource": null,
         "hide": 0,
@@ -554,31 +467,6 @@
         "refresh": 1,
         "regex": "",
         "type": "query"
-      },
-      {
-        "current": {
-          "value": [
-            "$__all"
-          ],
-          "text": "All"
-        },
-        "datasource": null,
-        "hide": 0,
-        "includeAll": true,
-        "label": "Sudosh Session ID",
-        "multi": true,
-        "name": "sudosh_session_id_var",
-        "options": [
-          {
-            "text": "All",
-            "value": "$__all",
-            "selected": true
-          }
-        ],
-        "query": "{\"find\": \"terms\", \"field\": \"sudosh_session_id.raw\"}",
-        "refresh": 1,
-        "regex": "",
-        "type": "query"
       }
     ]
   },
@@ -587,7 +475,7 @@
   },
   "refresh": false,
   "schemaVersion": 12,
-  "version": 5,
+  "version": 9,
   "links": [],
   "gnetId": null
 }
